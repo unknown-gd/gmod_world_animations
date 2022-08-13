@@ -75,8 +75,8 @@ if (SERVER) then
 	end)
 
 	-- On Water
-	hook.Add("OnEntityWaterLevelChanged", addon_name, function( ent, old, new )
-		if ent:IsPlayer() then
+	hook.Add("OnEntityWaterLevelChanged", addon_name, function( ply, old, new )
+		if ply:IsPlayer() then
 			if (new < 3) and (old >= 3) then
 				ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_FLINCH_PHYSICS )
 			elseif (new == 3) then
