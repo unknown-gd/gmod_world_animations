@@ -1,4 +1,5 @@
 local addon_name = "Simple World Interactions"
+local GESTURE_SLOT_CUSTOM = GESTURE_SLOT_CUSTOM
 local IsValid = IsValid
 
 if (SERVER) then
@@ -26,6 +27,9 @@ if (SERVER) then
 
 		local presstable = {"func_button", "gmod_button", "gmod_wire_button", "gmod_wire_keypad", "gmod_wire_keyboard"}
 		local pushtable = {"prop_door_rotating", "func_door_rotating", "gmod_wire_lever"}
+
+		local ACT_HL2MP_GESTURE_RANGE_ATTACK_SLAM = ACT_HL2MP_GESTURE_RANGE_ATTACK_SLAM
+		local ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST = ACT_HL2MP_GESTURE_RANGE_ATTACK_FIST
 		local CurTime = CurTime
 		local ipairs = ipairs
 
@@ -57,33 +61,51 @@ if (SERVER) then
 	end
 
 	-- Physics Gun Pickup
-	hook.Add("OnPlayerPhysicsPickup", addon_name, function( ply, ent )
-		if IsValid( ply ) and IsValid( ent ) then
-			ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_KNIFE )
-		end
-	end)
+	do
+		local ACT_HL2MP_GESTURE_RANGE_ATTACK_KNIFE = ACT_HL2MP_GESTURE_RANGE_ATTACK_KNIFE
+		hook.Add("OnPlayerPhysicsPickup", addon_name, function( ply, ent )
+			if IsValid( ply ) and IsValid( ent ) then
+				ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_KNIFE )
+			end
+		end)
+	end
 
 	-- Physics Gun Drop
-	hook.Add("OnPlayerPhysicsDrop", addon_name, function( ply, ent, thrown )
-		if IsValid( ply ) and IsValid( ent ) then
-			if (thrown == true) then
-				ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE )
-			else
-				ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE )
+	do
+
+		local ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE = ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE
+		local ACT_GMOD_GESTURE_ITEM_PLACE = ACT_GMOD_GESTURE_ITEM_PLACE
+
+		hook.Add("OnPlayerPhysicsDrop", addon_name, function( ply, ent, thrown )
+			if IsValid( ply ) and IsValid( ent ) then
+				if (thrown == true) then
+					ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE )
+				else
+					ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_GMOD_GESTURE_ITEM_PLACE )
+				end
 			end
-		end
-	end)
+		end)
+
+	end
 
 	-- On Water
-	hook.Add("OnEntityWaterLevelChanged", addon_name, function( ply, old, new )
-		if ply:IsPlayer() then
-			if (new < 3) and (old >= 3) then
-				ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_FLINCH_PHYSICS )
-			elseif (new == 3) then
-				ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_FLINCH_STOMACH )
+	do
+
+		local ACT_FLINCH_PHYSICS = ACT_FLINCH_PHYSICS
+		local ACT_FLINCH_STOMACH = ACT_FLINCH_STOMACH
+
+		hook.Add("OnEntityWaterLevelChanged", addon_name, function( ply, old, new )
+			if ply:IsPlayer() then
+				if (new < 3) and (old >= 3) then
+					ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_FLINCH_PHYSICS )
+				elseif (new == 3) then
+					ply:RunGesture( GESTURE_SLOT_CUSTOM, ACT_FLINCH_STOMACH )
+				end
 			end
-		end
-	end)
+		end)
+
+	end
+
 end
 
 if (CLIENT) then
