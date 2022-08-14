@@ -38,7 +38,7 @@ if (SERVER) then
 				if ply:KeyDown( IN_USE ) then return end
 
 				if ((ply[addon_name] or 0) > CurTime()) then return end
-				ply[addon_name] = CurTime() + 1
+				ply[addon_name] = CurTime() + 0.2
 
 				local class = ent:GetClass()
 				for num, value in ipairs( pushtable ) do
